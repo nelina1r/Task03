@@ -27,7 +27,7 @@ public class Customer extends Thread {
             buy();
             cyclicBarrier.await();
         } catch (InterruptedException | BrokenBarrierException e) {
-            e.printStackTrace();
+            System.out.println("Error occurred");
         }
 
     }
