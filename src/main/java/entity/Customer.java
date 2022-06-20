@@ -20,7 +20,7 @@ public class Customer extends Thread {
         while (!Storage.isEmpty()) {
             try {
                 cyclicBarrier.await();
-                int itemsBought = new Storage().buy((int) (Math.random() * RANDOM_COEFFICIENT + 1));  //const sdelat'
+                int itemsBought = new Storage().buy((int) (Math.random() * RANDOM_COEFFICIENT + 1));
                 if (itemsBought != 0) {
                     countOfBoughtItems += itemsBought;
                     countOfPurchases++;
