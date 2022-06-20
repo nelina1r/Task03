@@ -1,45 +1,21 @@
 package entity;
 
-import java.util.ArrayList;
-import java.util.List;
+public class Storage {
 
-public class Storage extends Thread {
-
-    private int itemsOnboardCounter;
-
-    public List<Customer> customerList;
-
-    public Storage(int itemsOnboardCounter) {
-        this.itemsOnboardCounter = itemsOnboardCounter;
-        this.customerList = new ArrayList();
-    }
-
-    public void startBuying() {
-        customerList.forEach(x -> new Thread(x).start());
-    }
+    private volatile static int items = 1000;
 
     public synchronized int buy(int requestToBuy) {
-        int boughtItems;
-        if (itemsOnboardCounter >= requestToBuy) {
-            itemsOnboardCounter -= requestToBuy;
-            boughtItems = requestToBuy;
+        if (requestToBuy > items) {
+            requestToBuy = items;
+            items = 0;
         } else {
-            boughtItems = itemsOnboardCounter;
-            itemsOnboardCounter = 0;
+            items -= requestToBuy;
         }
-        return boughtItems;
+        return requestToBuy;
     }
 
-    @Override
-    public void run() {
-        if (isEmpty()) {
-            customerList.forEach(Customer::printResult);
-        } else {
-            startBuying();
-        }
-    }
 
-    private boolean isEmpty() {
-        return itemsOnboardCounter == 0;
+    public static boolean isEmpty() {
+        return items == 0;
     }
 }

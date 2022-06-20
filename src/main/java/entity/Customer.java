@@ -5,9 +5,7 @@ import java.util.concurrent.CyclicBarrier;
 
 public class Customer extends Thread {
 
-    private final String name;
-
-    private final Storage storage;
+    private int id;
 
     private int countOfBoughtItems = 0;
 
@@ -15,34 +13,37 @@ public class Customer extends Thread {
 
     private CyclicBarrier cyclicBarrier;
 
-    public Customer(String name, Storage storage, CyclicBarrier cyclicBarrier) {
-        this.name = name;
-        this.storage = storage;
-        this.cyclicBarrier = cyclicBarrier;
-    }
+    private final int RANDOM_COEFFICIENT = 10;
 
     @Override
     public void run() {
-        try {
-            buy();
-            cyclicBarrier.await();
-        } catch (InterruptedException | BrokenBarrierException e) {
-            System.out.println("Error occurred");
+        while (!Storage.isEmpty()) {
+            try {
+                cyclicBarrier.await();
+                int itemsBought = new Storage().buy((int) (Math.random() * RANDOM_COEFFICIENT + 1));  //const sdelat'
+                if (itemsBought != 0) {
+                    countOfBoughtItems += itemsBought;
+                    countOfPurchases++;
+                }
+                cyclicBarrier.await();
+            } catch (BrokenBarrierException | InterruptedException e) {
+                System.out.println("Something went wrong");
+                ;
+            }
         }
-
-    }
-
-    public void buy() {
-        int itemsCounter = (int) (Math.random() * 10 + 1);
-        int boughtItemsCounter = storage.buy(itemsCounter);
-        if (boughtItemsCounter > 0) {
-            countOfBoughtItems += boughtItemsCounter;
-            countOfPurchases++;
-        }
+        printResult();
     }
 
     public void printResult() {
-        System.out.println(name + " bought products: " + countOfBoughtItems +
-                           "\nCount of purchases: " + countOfPurchases);
+        System.out.println("Customer with ID: " + id + " bought products: " + countOfBoughtItems +
+                "\nCount of purchases: " + countOfPurchases);
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setCyclicBarrier(CyclicBarrier cyclicBarrier) {
+        this.cyclicBarrier = cyclicBarrier;
     }
 }
