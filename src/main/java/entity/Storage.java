@@ -2,7 +2,7 @@ package entity;
 
 public class Storage {
 
-    private volatile static int items = 1000;
+    private static int items = 1000;
 
     public synchronized int buy(int requestToBuy) {
         if (requestToBuy > items) {

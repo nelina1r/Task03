@@ -28,7 +28,6 @@ public class Customer extends Thread {
                 cyclicBarrier.await();
             } catch (BrokenBarrierException | InterruptedException e) {
                 System.out.println("Something went wrong");
-                ;
             }
         }
         printResult();
