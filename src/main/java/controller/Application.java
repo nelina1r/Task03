@@ -11,12 +11,10 @@ public class Application {
             int customersCounter = Integer.parseInt(args[0]);
             CyclicBarrier cyclicBarrier = new CyclicBarrier(customersCounter);
             for (int i = 0; i < customersCounter; i++) {
-                Customer customer = new Customer();
-                customer.setCyclicBarrier(cyclicBarrier);
-                customer.setId(i);
+                Customer customer = new Customer(i, cyclicBarrier);
                 customer.start();
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             System.out.println("Invalid CLI argument: needed digit");
         }
     }

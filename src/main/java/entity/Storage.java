@@ -4,7 +4,7 @@ public class Storage {
 
     private static int items = 1000;
 
-    public synchronized int buy(int requestToBuy) {
+    public static synchronized int buy(int requestToBuy) {
         if (requestToBuy > items) {
             requestToBuy = items;
             items = 0;
@@ -13,7 +13,6 @@ public class Storage {
         }
         return requestToBuy;
     }
-
 
     public static boolean isEmpty() {
         return items == 0;

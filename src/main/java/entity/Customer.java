@@ -13,14 +13,20 @@ public class Customer extends Thread {
 
     private CyclicBarrier cyclicBarrier;
 
-    private final int RANDOM_COEFFICIENT = 10;
+    private final int COUNT_OF_MAXIMUM_ITEMS_PER_BUY = 10;
+
+
+    public Customer(int id, CyclicBarrier cyclicBarrier){
+        this.id = id;
+        this.cyclicBarrier = cyclicBarrier;
+    }
 
     @Override
     public void run() {
         while (!Storage.isEmpty()) {
             try {
                 cyclicBarrier.await();
-                int itemsBought = new Storage().buy((int) (Math.random() * RANDOM_COEFFICIENT + 1));
+                int itemsBought = Storage.buy((int) (Math.random() * COUNT_OF_MAXIMUM_ITEMS_PER_BUY + 1));
                 if (itemsBought != 0) {
                     countOfBoughtItems += itemsBought;
                     countOfPurchases++;
@@ -36,13 +42,5 @@ public class Customer extends Thread {
     public void printResult() {
         System.out.println("Customer with ID: " + id + " bought products: " + countOfBoughtItems +
                 "\nCount of purchases: " + countOfPurchases);
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setCyclicBarrier(CyclicBarrier cyclicBarrier) {
-        this.cyclicBarrier = cyclicBarrier;
     }
 }
